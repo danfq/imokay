@@ -17,6 +17,7 @@ class SoundItem extends StatefulWidget {
     required this.data,
     required this.icon,
     required this.playing,
+    this.extraInfo,
     this.padding = 0.0,
     this.showFavorite = true,
   });
@@ -26,6 +27,7 @@ class SoundItem extends StatefulWidget {
   final SoundData data;
   final IconData icon;
   final bool playing;
+  final String? extraInfo;
   final double padding;
   final bool showFavorite;
 
@@ -248,9 +250,21 @@ class _SoundItemState extends State<SoundItem>
                     ),
                     child: Padding(
                       padding: EdgeInsets.all(widget.padding),
-                      child: Icon(
-                        widget.icon,
-                        size: 60.0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            widget.icon,
+                            size: 60.0,
+                          ),
+                          widget.extraInfo != null
+                              ? const SizedBox(height: 8.0)
+                              : Container(),
+                          widget.extraInfo != null
+                              ? Text(widget.extraInfo!)
+                              : Container(),
+                        ],
                       ),
                     ),
                   ),

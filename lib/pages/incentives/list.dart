@@ -28,17 +28,10 @@ class _IncentivesListState extends State<IncentivesList> {
   final GlobalKey<AnimatedListState> _animatedListKey =
       GlobalKey<AnimatedListState>();
 
-  //AppBar Status
-  bool appBarStatus = LocalStorage.boxData(box: "app_bar")!["status"];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: appBarStatus ? 2.0 : 0.0,
-        backgroundColor: appBarStatus
-            ? Theme.of(context).appBarTheme.backgroundColor
-            : Colors.transparent,
         title: Text(
           "Incentives",
           style: Theme.of(context).textTheme.titleLarge,

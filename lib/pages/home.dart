@@ -42,6 +42,7 @@ class _HomeState extends State<Home> {
         title: const Text("I'm Okay"),
         leading: IconButton(
           icon: const Icon(Ionicons.ios_heart_outline),
+          tooltip: "Favorites",
           onPressed: () {
             Navigator.push(
               context,

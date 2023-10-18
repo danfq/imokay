@@ -27,8 +27,8 @@ Map<String, IconData> soundIcons = {
   "vacuum": MaterialCommunityIcons.vacuum,
   "talking": Ionicons.people,
   "tv_static": FontAwesome.tv,
-  "brown_noise": AntDesign.sound,
-  "white_noise": AntDesign.sound,
-  "green_noise": AntDesign.sound,
-  "custom": AntDesign.sound,
+  "brown_noise": Foundation.sound,
+  "white_noise": Foundation.sound,
+  "green_noise": Foundation.sound,
+  "custom": Ionicons.ios_add,
 };

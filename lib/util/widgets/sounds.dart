@@ -1,10 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:imokay/util/models/sound_data.dart';
-import 'package:imokay/util/notifications/local.dart';
-import 'package:imokay/util/sound/manager.dart';
-import 'package:imokay/util/sound/timer.dart';
+import 'package:imokay/util/sound/all.dart';
 import 'package:imokay/util/theming/controller.dart';
 import 'package:imokay/util/widgets/sound_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -60,28 +57,28 @@ class _MainUISoundsState extends State<MainUISounds>
                     children: [
                       SoundItem(
                         playing: audioPlaying,
-                        icon: Ionicons.thunderstorm_outline,
+                        icon: soundIcons["thunder"]!,
                         data: SoundData(
                           name: "thunder",
                         ),
                       ),
                       SoundItem(
                         playing: audioPlaying,
-                        icon: Feather.wind,
+                        icon: soundIcons["wind"]!,
                         data: SoundData(
                           name: "wind",
                         ),
                       ),
                       SoundItem(
                         playing: audioPlaying,
-                        icon: MaterialCommunityIcons.bird,
+                        icon: soundIcons["birds"]!,
                         data: SoundData(
                           name: "birds",
                         ),
                       ),
                       SoundItem(
                         playing: audioPlaying,
-                        icon: MaterialCommunityIcons.waves,
+                        icon: soundIcons["waves"]!,
                         data: SoundData(
                           name: "waves",
                         ),
@@ -98,28 +95,28 @@ class _MainUISoundsState extends State<MainUISounds>
                     children: [
                       SoundItem(
                         playing: audioPlaying,
-                        icon: MaterialCommunityIcons.fireplace,
+                        icon: soundIcons["fireplace"]!,
                         data: SoundData(
                           name: "fireplace",
                         ),
                       ),
                       SoundItem(
                         playing: audioPlaying,
-                        icon: MaterialCommunityIcons.vacuum,
+                        icon: soundIcons["vacuum"]!,
                         data: SoundData(
                           name: "vacuum",
                         ),
                       ),
                       SoundItem(
                         playing: audioPlaying,
-                        icon: Ionicons.people,
+                        icon: soundIcons["talking"]!,
                         data: SoundData(
                           name: "talking",
                         ),
                       ),
                       SoundItem(
                         playing: audioPlaying,
-                        icon: FontAwesome.tv,
+                        icon: soundIcons["tv_static"]!,
                         data: SoundData(
                           name: "tv_static",
                         ),
@@ -136,21 +133,24 @@ class _MainUISoundsState extends State<MainUISounds>
                     children: [
                       SoundItem(
                         playing: audioPlaying,
-                        icon: AntDesign.sound,
+                        icon: soundIcons["brown_noise"]!,
+                        extraInfo: "Brown Noise",
                         data: SoundData(
                           name: "brown_noise",
                         ),
                       ),
                       SoundItem(
                         playing: audioPlaying,
-                        icon: AntDesign.sound,
+                        icon: soundIcons["white_noise"]!,
+                        extraInfo: "White Noise",
                         data: SoundData(
                           name: "white_noise",
                         ),
                       ),
                       SoundItem(
                         playing: audioPlaying,
-                        icon: AntDesign.sound,
+                        icon: soundIcons["green_noise"]!,
+                        extraInfo: "Green Noise",
                         data: SoundData(
                           name: "green_noise",
                         ),
@@ -158,7 +158,8 @@ class _MainUISoundsState extends State<MainUISounds>
                       SoundItem(
                         enabled: !Platform.isIOS,
                         playing: audioPlaying,
-                        icon: AntDesign.sound,
+                        icon: soundIcons["custom"]!,
+                        extraInfo: "Custom Sound",
                         data: SoundData(
                           name: "custom",
                         ),

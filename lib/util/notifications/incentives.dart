@@ -60,8 +60,8 @@ class IncentiveNotifications {
     "Surround yourself with gentle sounds to calm your anxious thoughts.",
     "Quiet your mind, listen to the soothing sounds, and find tranquility.",
     "Trust in the process of self-care and finding inner peace.",
-    "«I'm so much more than the bad things that happen to me.»", //Jane <3
-    "«You can't wait until life isn't hard anymore before you decide to be happy.»", //Jane <3
+    "«I'm so much more than the bad things that happen to me.» - J", //Jane <3
+    "«You can't wait until life isn't hard anymore before you decide to be happy.» - J", //Jane <3
   ];
 
   ///Load Incentives into Memory
