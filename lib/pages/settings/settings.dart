@@ -7,7 +7,6 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:imokay/pages/incentives/list.dart';
 import 'package:imokay/util/notifications/incentives.dart';
 import 'package:imokay/util/notifications/local.dart';
-import 'package:imokay/util/storage/local.dart';
 import 'package:imokay/util/theming/controller.dart';
 import 'package:imokay/util/theming/themes.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -48,6 +47,12 @@ class _SettingsPageState extends State<SettingsPage> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Ionicons.ios_chevron_back),
+        ),
       ),
       body: SafeArea(
         child: SettingsList(

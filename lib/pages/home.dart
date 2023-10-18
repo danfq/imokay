@@ -40,72 +40,36 @@ class _HomeState extends State<Home> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              child: Row(
-                children: [
-                  PullDownButton(
-                    itemBuilder: (context) {
-                      return [
-                        PullDownMenuItem(
-                          icon: MaterialIcons.favorite,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => const Favorites(),
-                              ),
-                            );
-                          },
-                          title: "Favorites",
-                        ),
-                        PullDownMenuItem(
-                          icon: Ionicons.grid,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => const Groups(),
-                              ),
-                            );
-                          },
-                          title: "Groups",
-                        ),
-                      ];
-                    },
-                    buttonBuilder: (context, showMenu) {
-                      return CupertinoButton(
-                        onPressed: showMenu,
-                        child: const Icon(MaterialIcons.more_horiz),
-                      );
-                    },
-                  ),
-                ],
+        centerTitle: true,
+        title: const Text("I'm Okay"),
+        leading: IconButton(
+          icon: const Icon(Ionicons.ios_heart_outline),
+          onPressed: () {
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => const Favorites(),
               ),
-            ),
-            Text(
-              "I'm Okay",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            IconButton(
-              icon: Icon(
-                Ionicons.ios_settings_outline,
-                color: Theme.of(context).iconTheme.color,
-              ),
-              tooltip: "Settings",
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const SettingsPage(),
-                  ),
-                );
-              },
-            ),
-          ],
+            );
+          },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Ionicons.ios_settings_outline,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            tooltip: "Settings",
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => const SettingsPage(),
+                ),
+              );
+            },
+          ),
+        ],
         elevation: 0.0,
         backgroundColor: Colors.transparent,
       ),
