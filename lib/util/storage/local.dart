@@ -1,5 +1,4 @@
 import 'package:hive_flutter/adapters.dart';
-import 'package:imokay/util/models/groups.dart';
 import 'package:imokay/util/models/sound_data.dart';
 import 'package:imokay/util/sound/all.dart';
 import 'package:path_provider/path_provider.dart';
@@ -47,9 +46,6 @@ class LocalStorage {
   static void registerAdapters() {
     //SoundData Adapter
     Hive.registerAdapter(SoundDataAdapter());
-
-    //Group Adapter
-    Hive.registerAdapter(GroupAdapter());
   }
 
   ///Update Value

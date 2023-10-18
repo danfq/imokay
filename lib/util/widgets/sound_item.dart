@@ -1,18 +1,12 @@
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:imokay/util/models/groups.dart';
 import 'package:imokay/util/models/sound_data.dart';
-import 'package:imokay/util/notifications/local.dart';
 import 'package:imokay/util/sound/custom.dart';
 import 'package:imokay/util/sound/favorite.dart';
 import 'package:imokay/util/sound/manager.dart';
 import 'package:imokay/util/storage/local.dart';
-import 'package:imokay/util/text/edit.dart';
-import 'package:imokay/util/widgets/groups.dart';
-import 'package:pull_down_button/pull_down_button.dart';
 import 'package:slider_controller/slider_controller.dart';
 
 ///Sound Widget
