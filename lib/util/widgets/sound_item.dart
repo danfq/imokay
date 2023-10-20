@@ -134,53 +134,57 @@ class _SoundItemState extends State<SoundItem>
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: InkWell(
-                onLongPress: () async {
-                  //Show Volume Slider
-                  await showModalBottomSheet(
-                    context: context,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(14.0),
-                        topRight: Radius.circular(14.0),
-                      ),
-                    ),
-                    builder: (context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Text(
-                              "Volume",
-                              style: Theme.of(context).textTheme.titleMedium,
+                onLongPress: widget.enabled
+                    ? () async {
+                        //Show Volume Slider
+                        await showModalBottomSheet(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(14.0),
+                              topRight: Radius.circular(14.0),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(40.0),
-                            child: SliderController(
-                              sliderDecoration: SliderDecoration(
-                                activeColor:
-                                    Theme.of(context).colorScheme.secondary,
-                              ),
-                              value: volume,
-                              onChanged: (newVolume) async {
-                                setState(() {
-                                  volume = newVolume;
-                                });
+                          builder: (context) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Text(
+                                    "Volume",
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(40.0),
+                                  child: SliderController(
+                                    sliderDecoration: SliderDecoration(
+                                      activeColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                    value: volume,
+                                    onChanged: (newVolume) async {
+                                      setState(() {
+                                        volume = newVolume;
+                                      });
 
-                                //Set Player Volume
-                                await AudioPlayerManager.setPlayerVolume(
-                                  playerID: widget.data.name,
-                                  volume: volume,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+                                      //Set Player Volume
+                                      await AudioPlayerManager.setPlayerVolume(
+                                        playerID: widget.data.name,
+                                        volume: volume,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    : null,
                 onTap: widget.enabled
                     ? () async {
                         //Check for Custom Sound
