@@ -3,6 +3,9 @@
 <plist version="1.0">
 <dict>
 
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Select Custom Sound</string>
+
 	<key>UISupportsDocumentBrowser</key>
 	<string>Select Custom Sounds</string>
 
