@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:imokay/util/notifications/local.dart';
 import 'package:imokay/util/sound/manager.dart';
 
 class CountdownTimer extends StatefulWidget {
@@ -108,5 +109,204 @@ class _TimerPickerState extends State<TimerPicker> {
         ),
       ],
     );
+  }
+}
+
+///Timer Handler
+class TimerHandler {
+  ///Open Timer Sheet
+  static Future<void> openSheet({
+    required BuildContext context,
+    required bool timerInProgress,
+    required Duration timerDuration,
+    required bool audioPlaying,
+  }) async {
+    //Check if Timer is Active
+    if (!timerInProgress) {
+      //Show Timer Sheet
+      await showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(14.0),
+          ),
+        ),
+        isScrollControlled: true,
+        builder: (context) {
+          //Readable Time
+          var readableTime = "${timerDuration.inMinutes} Minutes";
+
+          return StatefulBuilder(
+            builder: (context, setInside) {
+              return SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text(
+                        "Timer",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Card(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(14.0),
+                          ),
+                        ),
+                        child: ListTile(
+                          title: const Text("Duration"),
+                          trailing: Text(
+                            readableTime,
+                          ),
+                          onTap: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Dialog(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.all(
+                                          20.0,
+                                        ),
+                                        child: Text(
+                                          "Set Timer Duration",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(
+                                          20.0,
+                                        ),
+                                        child: TimerPicker(
+                                          initialDurationInMinutes:
+                                              timerDuration.inMinutes,
+                                          onDurationChanged: (duration) {
+                                            setInside(() {
+                                              timerDuration = duration;
+                                              readableTime =
+                                                  "${timerDuration.inMinutes} Minutes";
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            //Timer Status
+                            setInside(() {
+                              timerInProgress = true;
+                            });
+
+                            Future.delayed(timerDuration, () {
+                              setInside(() {
+                                timerInProgress = false;
+                                audioPlaying = false;
+                              });
+                            });
+
+                            //Close Sheet
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(
+                              context,
+                            ).cardColor,
+                          ),
+                          child: const Text("Set Timer"),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      );
+    } else {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Timer Active"),
+            content: const Text(
+              "A Timer is already active.\n\nWould you like to cancel it?",
+            ),
+            actions: [
+              Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        //Close Dialog
+                        Navigator.pop(context);
+
+                        //Cancel Active Timer
+                        timerInProgress = false;
+
+                        //Stop All AudioPlayers
+                        AudioPlayerManager.stopAllPlayers();
+
+                        //Notify User
+                        LocalNotifications.toast(
+                          message: "Timer Cancelled",
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).cardColor,
+                      ),
+                      child: const Text(
+                        "Cancel Active Timer",
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        //Do Nothing - Close Dialog
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).cardColor,
+                      ),
+                      child: const Text(
+                        "Proceed with Current Timer",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
