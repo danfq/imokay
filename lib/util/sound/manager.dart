@@ -1,7 +1,26 @@
 import 'package:audioplayers/audioplayers.dart';
 
 class AudioPlayerManager {
+  ///Players
   static final Map<String, AudioPlayer> _players = {};
+
+  ///Initialize Audio Service
+  static void init() {
+    //Set Global Context
+    AudioPlayer.global.setAudioContext(
+      const AudioContext(
+        iOS: AudioContextIOS(
+          category: AVAudioSessionCategory.playback,
+          options: [
+            AVAudioSessionOptions.allowBluetoothA2DP,
+            AVAudioSessionOptions.allowBluetooth,
+            AVAudioSessionOptions.mixWithOthers,
+          ],
+        ),
+        android: AudioContextAndroid(audioFocus: AndroidAudioFocus.gain),
+      ),
+    );
+  }
 
   ///Get Audio Player by `playerID`
   static AudioPlayer getPlayer(String playerID) {

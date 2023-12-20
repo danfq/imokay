@@ -2,7 +2,7 @@
     package="io.github.danfq.imokay">
    <application
         android:label="I'm Okay"
-        android:name="${applicationName}"
+        android:name=".Application"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
