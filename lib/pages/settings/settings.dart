@@ -192,37 +192,41 @@ class _SettingsPageState extends State<SettingsPage> {
                               const SizedBox(
                                 height: 40.0,
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  //Close Bottom Sheet
-                                  Navigator.pop(context);
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    //Close Bottom Sheet
+                                    Navigator.pop(context);
 
-                                  //Save New Theme
-                                  AdaptiveTheme.of(context).setTheme(
-                                    light: Themes.light().copyWith(
-                                      colorScheme:
-                                          Themes.light().colorScheme.copyWith(
-                                                secondary: accentColor,
-                                              ),
-                                      cardColor: activeSoundColor,
-                                    ),
-                                    dark: Themes.dark().copyWith(
-                                      colorScheme:
-                                          Themes.dark().colorScheme.copyWith(
-                                                secondary: accentColor,
-                                              ),
-                                      cardColor: activeSoundColor,
-                                    ),
-                                  );
+                                    //Save New Theme
+                                    AdaptiveTheme.of(context).setTheme(
+                                      light: Themes.light().copyWith(
+                                        colorScheme:
+                                            Themes.light().colorScheme.copyWith(
+                                                  secondary: accentColor,
+                                                ),
+                                        cardColor: activeSoundColor,
+                                      ),
+                                      dark: Themes.dark().copyWith(
+                                        colorScheme:
+                                            Themes.dark().colorScheme.copyWith(
+                                                  secondary: accentColor,
+                                                ),
+                                        cardColor: activeSoundColor,
+                                      ),
+                                    );
 
-                                  LocalNotifications.toast(
-                                    message: "New Theme Saved",
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).cardColor,
+                                    LocalNotifications.toast(
+                                      message: "New Theme Saved",
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Theme.of(context).cardColor,
+                                  ),
+                                  child: const Text("Save Theme"),
                                 ),
-                                child: const Text("Guardar Tema"),
                               ),
                             ],
                           ),

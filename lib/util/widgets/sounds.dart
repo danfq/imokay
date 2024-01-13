@@ -183,7 +183,7 @@ class _MainUISoundsState extends State<MainUISounds>
             count: 3,
             effect: ExpandingDotsEffect(
               activeDotColor: ThemeController.current(context: context)
-                  ? Theme.of(context).cardColor
+                  ? Theme.of(context).iconTheme.color!
                   : Colors.black,
               dotWidth: 10.0,
               dotHeight: 10.0,
