@@ -43,6 +43,7 @@ dependencies:
   google_fonts: ^4.0.4
   iconify_flutter: ^0.0.5
   audioplayers: ^5.2.1
+  url_launcher: ^6.2.3
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +57,9 @@ flutter:
 
   # Assets
   assets:
+
+    # Main
+    - assets/
 
     # Audio
     - assets/audio/

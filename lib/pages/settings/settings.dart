@@ -1,11 +1,9 @@
-import 'dart:io';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:imokay/pages/incentives/list.dart';
-import 'package:imokay/util/notifications/incentives.dart';
+import 'package:imokay/pages/team/team.dart';
 import 'package:imokay/util/notifications/local.dart';
 import 'package:imokay/util/theming/controller.dart';
 import 'package:imokay/util/theming/themes.dart';
@@ -33,9 +31,6 @@ class _SettingsPageState extends State<SettingsPage> {
     Color activeSoundColor = Theme.of(
       context,
     ).appBarTheme.backgroundColor!;
-
-    //Notifications
-    bool incentiveNotificationsMode = IncentiveNotifications.current();
 
     //Settings
     return Scaffold(
@@ -248,34 +243,46 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
 
-            //Incentives
+            //Team & Licenses
             SettingsSection(
-              title: const Text("Incentives"),
+              title: const Text("Legal & More"),
               tiles: [
-                SettingsTile.switchTile(
-                  enabled: !Platform.isIOS,
-                  leading: const Icon(Ionicons.notifications),
-                  initialValue: incentiveNotificationsMode,
-                  onToggle: (status) async {
-                    await IncentiveNotifications.setMode(mode: status);
-                    setState(() {});
-                  },
-                  title: const Text("Incentive Notifications"),
-                  description: const Text("Get Incentive Notifications"),
-                ),
+                //Team
                 SettingsTile.navigation(
-                  enabled: !Platform.isIOS,
-                  leading: const Icon(FontAwesome5Solid.smile_beam),
-                  title: const Text("Incentives"),
-                  onPressed: (context) {
-                    //Show Incentives List
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => const IncentivesList(),
+                  leading: const Icon(Ionicons.ios_people),
+                  title: const Text("Team"),
+                  description: const Text("The Team behind I'm Okay"),
+                  onPressed: (context) => Navigator.push(
+                    context,
+                    CupertinoPageRoute(builder: (context) => const Team()),
+                  ),
+                ),
+
+                //Licenses
+                SettingsTile.navigation(
+                  leading: const Icon(Ionicons.ios_document),
+                  title: const Text("Licenses"),
+                  description: const Text(
+                    "Licenses for Packages that make I'm Okay possible",
+                  ),
+                  onPressed: (context) => Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => LicensePage(
+                        applicationIcon: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(14.0),
+                            child: Image.asset(
+                              "assets/logo.png",
+                              height: 80.0,
+                            ),
+                          ),
+                        ),
+                        applicationName: "I'm Okay",
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
               ],
             ),
