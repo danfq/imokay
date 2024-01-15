@@ -19,9 +19,7 @@ class MainUISounds extends StatefulWidget {
 
 class _MainUISoundsState extends State<MainUISounds>
     with AutomaticKeepAliveClientMixin {
-  //Timer
-  Duration timerDuration = const Duration(minutes: 5);
-  bool timerInProgress = false;
+  //Audio
   bool audioPlaying = false;
 
   //Paging
@@ -178,15 +176,18 @@ class _MainUISoundsState extends State<MainUISounds>
           const SizedBox(
             height: 20.0,
           ),
-          AnimatedSmoothIndicator(
-            activeIndex: currentSet,
-            count: 3,
-            effect: ExpandingDotsEffect(
-              activeDotColor: ThemeController.current(context: context)
-                  ? Theme.of(context).iconTheme.color!
-                  : Colors.black,
-              dotWidth: 10.0,
-              dotHeight: 10.0,
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: AnimatedSmoothIndicator(
+              activeIndex: currentSet,
+              count: 3,
+              effect: ExpandingDotsEffect(
+                activeDotColor: ThemeController.current(context: context)
+                    ? Theme.of(context).iconTheme.color!
+                    : Colors.black,
+                dotWidth: 10.0,
+                dotHeight: 10.0,
+              ),
             ),
           ),
         ],
