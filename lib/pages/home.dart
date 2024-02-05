@@ -7,7 +7,6 @@ import 'package:imokay/pages/focus/focus.dart';
 import 'package:imokay/pages/settings/settings.dart';
 import 'package:imokay/pages/sounds/sounds.dart';
 import 'package:imokay/util/constants/text.dart';
-import 'package:imokay/util/sound/manager.dart';
 import 'package:imokay/util/theming/controller.dart';
 
 class Home extends StatefulWidget {
