@@ -1,17 +1,5 @@
 package io.github.danfq.imokay
-import io.flutter.app.FlutterApplication
-import io.flutter.plugin.common.PluginRegistry
-import io.flutter.plugins.GeneratedPluginRegistrant
-import com.danielgauci.native_audio.NativeAudioPlugin
+import io.flutter.embedding.android.FlutterActivity
 
-class Application : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
-
-    override fun onCreate() {
-        super.onCreate()
-        NativeAudioPlugin.setPluginRegistrantCallback(this)
-    }
-
-    override fun registerWith(registry: PluginRegistry) {
-        GeneratedPluginRegistrant.registerWith(registry)
-    }
+class MainActivity: FlutterActivity() {
 }

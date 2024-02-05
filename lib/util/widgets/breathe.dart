@@ -11,6 +11,7 @@ class BreathingLine extends StatefulWidget {
 
 class _BreathingLineState extends State<BreathingLine>
     with SingleTickerProviderStateMixin {
+  //Animation Controller
   late AnimationController _animationController;
   late Animation<double> _animation;
 

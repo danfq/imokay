@@ -69,6 +69,3 @@ flutter:
 
     # Animations
     - assets/animations/
-
-    # Text
-    - assets/text/
