@@ -13,12 +13,6 @@ void main() async {
   //Initialize Local Storage
   await LocalStorage.init();
 
-  //Initialize Notifications System
-  await NotificationHandler.init();
-
-  //Load Incentives Into Memory
-  await IncentiveNotifications.loadIncentivesInMemory();
-
   //Run App
   runApp(
     AdaptiveTheme(
@@ -27,6 +21,7 @@ void main() async {
       initial: AdaptiveThemeMode.dark,
       builder: (light, dark) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           theme: light,
           darkTheme: dark,
           home: const Home(),

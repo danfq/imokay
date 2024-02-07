@@ -48,10 +48,7 @@ class _MainUISoundsState extends State<MainUISounds>
                   GridView.count(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    childAspectRatio: 1,
                     crossAxisCount: 2,
-                    crossAxisSpacing: 0.5,
-                    mainAxisSpacing: 0.5,
                     children: [
                       SoundItem(
                         playing: audioPlaying,

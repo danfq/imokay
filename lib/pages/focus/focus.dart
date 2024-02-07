@@ -55,7 +55,7 @@ class _FocusModeState extends State<FocusMode> {
         ),
       ),
       bottomNavigationBar: const Padding(
-        padding: EdgeInsets.all(40.0),
+        padding: EdgeInsets.all(20.0),
         child: FocusVolume(),
       ),
     );

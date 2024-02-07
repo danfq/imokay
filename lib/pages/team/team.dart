@@ -30,7 +30,7 @@ class Team extends StatelessWidget {
       TeamMember(
         icon: Fontisto.test_tube_alt,
         name: "MatiFFQ",
-        position: "QA Testing",
+        position: "Android QA Testing",
         url: "https://instagram.com/tide_ff",
       ),
 
@@ -38,7 +38,7 @@ class Team extends StatelessWidget {
       TeamMember(
         icon: Fontisto.test_tube_alt,
         name: "Inês Pratas",
-        position: "QA Testing",
+        position: "iOS QA Testing",
         url: "https://instagram.com/seni_satarp",
       ),
     ];
