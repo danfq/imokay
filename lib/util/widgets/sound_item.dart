@@ -139,6 +139,7 @@ class _SoundItemState extends State<SoundItem>
                         //Show Volume Slider
                         await showModalBottomSheet(
                           context: context,
+                          showDragHandle: true,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(14.0),
@@ -154,27 +155,31 @@ class _SoundItemState extends State<SoundItem>
                                   child: Text(
                                     "Volume",
                                     style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                        Theme.of(context).textTheme.titleLarge,
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(40.0),
-                                  child: SliderController(
-                                    sliderDecoration: SliderDecoration(
-                                      activeColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                    ),
-                                    value: volume,
-                                    onChanged: (newVolume) async {
-                                      setState(() {
-                                        volume = newVolume;
-                                      });
+                                  child: StatefulBuilder(
+                                    builder: (context, update) {
+                                      return Slider(
+                                        min: 10.0,
+                                        max: 100.0,
+                                        value: volume,
+                                        onChanged: (newVolume) async {
+                                          update(() => {});
 
-                                      //Set Player Volume
-                                      await AudioPlayerManager.setPlayerVolume(
-                                        playerID: widget.data.name,
-                                        volume: volume,
+                                          setState(() {
+                                            volume = newVolume;
+                                          });
+
+                                          //Set Player Volume
+                                          await AudioPlayerManager
+                                              .setPlayerVolume(
+                                            playerID: widget.data.name,
+                                            volume: volume,
+                                          );
+                                        },
                                       );
                                     },
                                   ),
