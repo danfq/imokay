@@ -51,16 +51,14 @@ class LocalStorage {
   ///Update Value
   static Future<void> updateValue({
     required String box,
-    required int item,
+    required String item,
     required dynamic value,
   }) async {
     //Box
     final localBox = Hive.box(box);
 
     //Update Value
-    await localBox.putAll({
-      sounds.entries.elementAt(item).value: !value,
-    });
+    localBox.put(item, value);
   }
 
   ///Set Data
@@ -76,7 +74,7 @@ class LocalStorage {
   }
 
   ///Get Box Data
-  static Map<dynamic, dynamic>? boxData({required String box}) {
+  static Map<dynamic, dynamic> boxData({required String box}) {
     //Box
     final localBox = Hive.box(box);
 

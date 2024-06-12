@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:imokay/pages/team/team.dart';
 import 'package:imokay/util/notifications/local.dart';
+import 'package:imokay/util/storage/local.dart';
+import 'package:imokay/util/theming/color_handler.dart';
 import 'package:imokay/util/theming/controller.dart';
 import 'package:imokay/util/theming/themes.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -20,17 +22,20 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     //Default Colors
-    Color accentColor = Theme.of(
-      context,
-    ).colorScheme.secondary;
+    Color accentColor = ColorHandler.colorFromString(
+          LocalStorage.boxData(box: "preferences")["colors"]?["accent"],
+        ) ??
+        Theme.of(context).colorScheme.secondary;
 
-    Color favoritesColor = Theme.of(
-      context,
-    ).colorScheme.secondary;
+    Color favoritesColor = ColorHandler.colorFromString(
+          LocalStorage.boxData(box: "preferences")["colors"]?["favorites"],
+        ) ??
+        Theme.of(context).colorScheme.secondary;
 
-    Color activeSoundColor = Theme.of(
-      context,
-    ).appBarTheme.backgroundColor!;
+    Color activeSoundColor = ColorHandler.colorFromString(
+          LocalStorage.boxData(box: "preferences")["colors"]?["active_sound"],
+        ) ??
+        Theme.of(context).cardColor;
 
     //Settings
     return Scaffold(
@@ -54,17 +59,9 @@ class _SettingsPageState extends State<SettingsPage> {
           physics: const BouncingScrollPhysics(),
           lightTheme: SettingsThemeData(
             settingsListBackground: Theme.of(context).scaffoldBackgroundColor,
-            titleTextColor: Theme.of(context).colorScheme.primary,
-            settingsTileTextColor: Theme.of(context).colorScheme.primary,
-            tileDescriptionTextColor: Theme.of(context).colorScheme.primary,
-            leadingIconsColor: Theme.of(context).iconTheme.color,
           ),
           darkTheme: SettingsThemeData(
             settingsListBackground: Theme.of(context).scaffoldBackgroundColor,
-            titleTextColor: Colors.white70,
-            settingsTileTextColor: Theme.of(context).colorScheme.primary,
-            tileDescriptionTextColor: Theme.of(context).colorScheme.primary,
-            leadingIconsColor: Theme.of(context).iconTheme.color,
           ),
           sections: [
             SettingsSection(
@@ -93,6 +90,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: const Text("Colors"),
                   onPressed: (context) async {
                     await showModalBottomSheet(
+                      showDragHandle: true,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(14.0),
@@ -116,72 +114,130 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ),
                                 ),
                               ),
-                              ListTile(
-                                title: const Text("Accent Color"),
-                                trailing: Container(
-                                  width: 30,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.secondary,
-                                  ),
-                                ),
-                                onTap: () async {
-                                  //Show Dialog
-                                  await showColorPickerDialog(
-                                    context,
-                                    accentColor,
-                                  ).then((newColor) {
-                                    setState(() {
-                                      accentColor = newColor;
-                                    });
-                                  });
+                              StatefulBuilder(
+                                builder: (context, update) {
+                                  return ListTile(
+                                    title: const Text("Accent"),
+                                    trailing: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: accentColor,
+                                      ),
+                                    ),
+                                    onTap: () async {
+                                      //Show Dialog
+                                      await showColorPickerDialog(
+                                        context,
+                                        accentColor,
+                                      ).then((newColor) async {
+                                        //Update UI
+                                        setState(() {
+                                          accentColor = newColor;
+                                        });
+
+                                        update(() => {});
+
+                                        //Update Colors Locally
+                                        await LocalStorage.updateValue(
+                                          box: "preferences",
+                                          item: "colors",
+                                          value: {
+                                            "accent": accentColor.toString(),
+                                            "favorites":
+                                                favoritesColor.toString(),
+                                            "active_sound":
+                                                activeSoundColor.toString(),
+                                          },
+                                        );
+                                      });
+                                    },
+                                  );
                                 },
                               ),
-                              ListTile(
-                                title: const Text("Favorites Color"),
-                                trailing: Container(
-                                  width: 30,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: favoritesColor,
-                                  ),
-                                ),
-                                onTap: () async {
-                                  //Show Dialog
-                                  await showColorPickerDialog(
-                                    context,
-                                    favoritesColor,
-                                  ).then((newColor) {
-                                    setState(() {
-                                      favoritesColor = newColor;
-                                    });
-                                  });
+                              StatefulBuilder(
+                                builder: (context, update) {
+                                  return ListTile(
+                                    title: const Text("Favorites"),
+                                    trailing: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: favoritesColor,
+                                      ),
+                                    ),
+                                    onTap: () async {
+                                      //Show Dialog
+                                      await showColorPickerDialog(
+                                        context,
+                                        favoritesColor,
+                                      ).then((newColor) async {
+                                        //Update UI
+                                        setState(() {
+                                          favoritesColor = newColor;
+                                        });
+
+                                        update(() => {});
+
+                                        //Update Colors Locally
+                                        await LocalStorage.updateValue(
+                                          box: "preferences",
+                                          item: "colors",
+                                          value: {
+                                            "accent": accentColor.toString(),
+                                            "favorites":
+                                                favoritesColor.toString(),
+                                            "active_sound":
+                                                activeSoundColor.toString(),
+                                          },
+                                        );
+                                      });
+                                    },
+                                  );
                                 },
                               ),
-                              ListTile(
-                                title: const Text("Active Sound Color"),
-                                trailing: Container(
-                                  width: 30,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: activeSoundColor,
-                                  ),
-                                ),
-                                onTap: () async {
-                                  //Show Dialog
-                                  await showColorPickerDialog(
-                                    context,
-                                    activeSoundColor,
-                                  ).then((newColor) {
-                                    setState(() {
-                                      activeSoundColor = newColor;
-                                    });
-                                  });
+                              StatefulBuilder(
+                                builder: (context, update) {
+                                  return ListTile(
+                                    title: const Text("Sound Tiles"),
+                                    trailing: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: activeSoundColor,
+                                      ),
+                                    ),
+                                    onTap: () async {
+                                      //Show Dialog
+                                      await showColorPickerDialog(
+                                        context,
+                                        activeSoundColor,
+                                      ).then((newColor) async {
+                                        //Update UI
+                                        setState(() {
+                                          activeSoundColor = newColor;
+                                        });
+
+                                        update(() => {});
+
+                                        //Update Colors Locally
+                                        await LocalStorage.updateValue(
+                                          box: "preferences",
+                                          item: "colors",
+                                          value: {
+                                            "accent": accentColor.toString(),
+                                            "favorites":
+                                                favoritesColor.toString(),
+                                            "active_sound":
+                                                activeSoundColor.toString(),
+                                          },
+                                        );
+                                      });
+                                    },
+                                  );
                                 },
                               ),
                               const SizedBox(
@@ -218,9 +274,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
-                                        Theme.of(context).cardColor,
+                                        Theme.of(context).dialogBackgroundColor,
                                   ),
-                                  child: const Text("Save Theme"),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Save Theme"),
+                                  ),
                                 ),
                               ),
                             ],
@@ -236,7 +295,17 @@ class _SettingsPageState extends State<SettingsPage> {
                   leading: const Icon(Ionicons.reload),
                   title: const Text("Reset Theme"),
                   onPressed: (context) async {
+                    //Reset Theme
                     await AdaptiveTheme.of(context).reset();
+
+                    //Reset Colors
+                    await LocalStorage.updateValue(
+                      box: "preferences",
+                      item: "colors",
+                      value: {},
+                    );
+
+                    //Notify User
                     LocalNotifications.toast(message: "Theme Reset");
                   },
                 ),
