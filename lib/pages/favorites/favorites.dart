@@ -26,7 +26,7 @@ class _FavoritesState extends State<Favorites> {
     super.initState();
 
     //Set Active Favorites
-    activeFavorites = favorites?.entries.map((item) {
+    activeFavorites = favorites.entries.map((item) {
       if (item.value == true) {
         return item.key;
       }

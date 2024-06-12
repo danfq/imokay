@@ -7,7 +7,6 @@ import 'package:imokay/util/sound/custom.dart';
 import 'package:imokay/util/sound/favorite.dart';
 import 'package:imokay/util/sound/manager.dart';
 import 'package:imokay/util/storage/local.dart';
-import 'package:slider_controller/slider_controller.dart';
 
 ///Sound Widget
 class SoundItem extends StatefulWidget {
@@ -53,7 +52,7 @@ class _SoundItemState extends State<SoundItem>
   @override
   void initState() {
     super.initState();
-    favorite = LocalStorage.boxData(box: "favorites")![widget.data.name];
+    favorite = LocalStorage.boxData(box: "favorites")[widget.data.name];
 
     //Playing State
     playing = AudioPlayerManager.getPlayer(widget.data.name).state ==
@@ -75,7 +74,7 @@ class _SoundItemState extends State<SoundItem>
         ? AssetSource("audio/${widget.data.name}.flac")
         : BytesSource(
             File(
-              LocalStorage.boxData(box: "custom_sound")!["path"],
+              LocalStorage.boxData(box: "custom_sound")["path"],
             ).readAsBytesSync(),
           );
 
@@ -198,7 +197,7 @@ class _SoundItemState extends State<SoundItem>
                           final data =
                               LocalStorage.boxData(box: "custom_sound");
 
-                          if (data != null && data.isNotEmpty) {
+                          if (data.isNotEmpty) {
                             if (mounted) {
                               setState(() {
                                 playing = !playing;
