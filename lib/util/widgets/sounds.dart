@@ -1,38 +1,33 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:imokay/util/models/sound_data.dart';
+import 'package:get/get.dart';
 import 'package:imokay/util/sound/all.dart';
 import 'package:imokay/util/theming/controller.dart';
 import 'package:imokay/util/widgets/sound_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-///Main UI Sounds
-class MainUISounds extends StatefulWidget {
-  const MainUISounds({super.key, required this.soundKeys});
+// Controller for handling state
+class MainUISoundsController extends GetxController {
+  var currentSet = 0.obs;
+  var audioPlaying = false.obs;
 
-  //Sound Keys
-  final List<GlobalKey> soundKeys;
-
-  @override
-  State<MainUISounds> createState() => _MainUISoundsState();
+  // Method to change the current page
+  void setPage(int page) {
+    currentSet.value = page;
+  }
 }
 
-class _MainUISoundsState extends State<MainUISounds>
-    with AutomaticKeepAliveClientMixin {
-  //Audio
-  bool audioPlaying = false;
+class MainUISounds extends StatelessWidget {
+  MainUISounds({super.key, required this.soundKeys});
 
-  //Paging
-  final PageController _setController = PageController(initialPage: 0);
-  int currentSet = 0;
+  // Sound Keys
+  final List<GlobalKey> soundKeys;
 
-  @override
-  bool get wantKeepAlive => true;
+  final MainUISoundsController controller = Get.put(MainUISoundsController());
+  final PageController _pageController = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -41,154 +36,97 @@ class _MainUISoundsState extends State<MainUISounds>
             child: PageStorage(
               bucket: PageStorageBucket(),
               child: PageView(
-                controller: _setController,
+                controller: _pageController,
                 physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 children: [
-                  GridView.count(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    children: [
-                      SoundItem(
-                        playing: audioPlaying,
-                        icon: soundIcons["thunder"]!,
-                        data: SoundData(
-                          name: "thunder",
-                        ),
-                      ),
-                      SoundItem(
-                        playing: audioPlaying,
-                        icon: soundIcons["wind"]!,
-                        data: SoundData(
-                          name: "wind",
-                        ),
-                      ),
-                      SoundItem(
-                        playing: audioPlaying,
-                        icon: soundIcons["birds"]!,
-                        data: SoundData(
-                          name: "birds",
-                        ),
-                      ),
-                      SoundItem(
-                        playing: audioPlaying,
-                        icon: soundIcons["waves"]!,
-                        data: SoundData(
-                          name: "waves",
-                        ),
-                      ),
+                  _buildSoundGrid(
+                    context,
+                    soundData: [
+                      SoundData(name: "thunder"),
+                      SoundData(name: "wind"),
+                      SoundData(name: "birds"),
+                      SoundData(name: "waves"),
                     ],
                   ),
-                  GridView.count(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    childAspectRatio: 1,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 4,
-                    children: [
-                      SoundItem(
-                        playing: audioPlaying,
-                        icon: soundIcons["fireplace"]!,
-                        data: SoundData(
-                          name: "fireplace",
-                        ),
-                      ),
-                      SoundItem(
-                        playing: audioPlaying,
-                        icon: soundIcons["vacuum"]!,
-                        data: SoundData(
-                          name: "vacuum",
-                        ),
-                      ),
-                      SoundItem(
-                        playing: audioPlaying,
-                        icon: soundIcons["talking"]!,
-                        data: SoundData(
-                          name: "talking",
-                        ),
-                      ),
-                      SoundItem(
-                        playing: audioPlaying,
-                        icon: soundIcons["tv_static"]!,
-                        data: SoundData(
-                          name: "tv_static",
-                        ),
-                      ),
+                  _buildSoundGrid(
+                    context,
+                    soundData: [
+                      SoundData(name: "fireplace"),
+                      SoundData(name: "vacuum"),
+                      SoundData(name: "talking"),
+                      SoundData(name: "tv_static"),
                     ],
                   ),
-                  GridView.count(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    childAspectRatio: 1,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 4,
-                    children: [
-                      SoundItem(
-                        playing: audioPlaying,
-                        icon: soundIcons["brown_noise"]!,
-                        extraInfo: "Brown Noise",
-                        data: SoundData(
-                          name: "brown_noise",
-                        ),
-                      ),
-                      SoundItem(
-                        playing: audioPlaying,
-                        icon: soundIcons["white_noise"]!,
-                        extraInfo: "White Noise",
-                        data: SoundData(
-                          name: "white_noise",
-                        ),
-                      ),
-                      SoundItem(
-                        playing: audioPlaying,
-                        icon: soundIcons["green_noise"]!,
-                        extraInfo: "Green Noise",
-                        data: SoundData(
-                          name: "green_noise",
-                        ),
-                      ),
-                      SoundItem(
-                        enabled: !Platform.isIOS,
-                        playing: audioPlaying,
-                        icon: soundIcons["custom"]!,
+                  _buildSoundGrid(
+                    context,
+                    soundData: [
+                      SoundData(name: "brown_noise", extraInfo: "Brown Noise"),
+                      SoundData(name: "white_noise", extraInfo: "White Noise"),
+                      SoundData(name: "green_noise", extraInfo: "Green Noise"),
+                      SoundData(
+                        name: "custom",
                         extraInfo: "Custom Sound",
-                        data: SoundData(
-                          name: "custom",
-                        ),
+                        enabled: !Platform.isIOS,
                       ),
                     ],
                   ),
                 ],
                 onPageChanged: (page) {
-                  setState(() {
-                    currentSet = page;
-                  });
+                  controller.setPage(page);
                 },
               ),
             ),
           ),
-          const SizedBox(
-            height: 20.0,
-          ),
+          const SizedBox(height: 20.0),
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: AnimatedSmoothIndicator(
-              activeIndex: currentSet,
-              count: 3,
-              effect: ExpandingDotsEffect(
-                activeDotColor: ThemeController.current(context: context)
-                    ? Theme.of(context).iconTheme.color!
-                    : Colors.black,
-                dotWidth: 10.0,
-                dotHeight: 10.0,
-              ),
-            ),
+            child: Obx(() => AnimatedSmoothIndicator(
+                  activeIndex: controller.currentSet.value,
+                  count: 3,
+                  effect: ExpandingDotsEffect(
+                    activeDotColor: ThemeController.current(context: context)
+                        ? Theme.of(context).iconTheme.color!
+                        : Colors.black,
+                    dotWidth: 10.0,
+                    dotHeight: 10.0,
+                  ),
+                )),
           ),
         ],
       ),
     );
   }
+
+  Widget _buildSoundGrid(BuildContext context,
+      {required List<SoundData> soundData}) {
+    return GridView.builder(
+      physics: const BouncingScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 4,
+        mainAxisSpacing: 4,
+      ),
+      itemCount: soundData.length,
+      itemBuilder: (context, index) {
+        final data = soundData[index];
+        return Obx(() => SoundItem(
+              playing: controller.audioPlaying.value,
+              icon: soundIcons[data.name]!,
+              data: data,
+              extraInfo: data.extraInfo,
+              enabled: data.enabled,
+            ));
+      },
+    );
+  }
+}
+
+class SoundData {
+  final String name;
+  final String? extraInfo;
+  final bool enabled;
+
+  SoundData({required this.name, this.extraInfo, this.enabled = true});
 }

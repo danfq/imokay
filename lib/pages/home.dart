@@ -1,7 +1,6 @@
-import 'package:confirm_dialog/confirm_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:imokay/pages/favorites/favorites.dart';
 import 'package:imokay/pages/focus/focus.dart';
 import 'package:imokay/pages/settings/settings.dart';
@@ -9,27 +8,17 @@ import 'package:imokay/pages/sounds/sounds.dart';
 import 'package:imokay/util/constants/text.dart';
 import 'package:imokay/util/theming/controller.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class Home extends StatelessWidget {
+  Home({super.key});
 
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    //Immersion
-    ThemeController.immersion(context: context);
-  }
-
-  //Audio
-  bool audioPlaying = false;
+  //Inject Theme Controller
+  final ThemeController themeController = Get.put(ThemeController());
 
   @override
   Widget build(BuildContext context) {
+    //Immersion
+    themeController.immersion(context: context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -39,12 +28,7 @@ class _HomeState extends State<Home> {
           icon: const Icon(Ionicons.ios_heart_outline),
           tooltip: "Favorites",
           onPressed: () {
-            Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (context) => const Favorites(),
-              ),
-            );
+            Get.to(() => const Favorites());
           },
         ),
         actions: [
@@ -55,12 +39,7 @@ class _HomeState extends State<Home> {
             ),
             tooltip: "Settings",
             onPressed: () async {
-              await Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => const SettingsPage(),
-                ),
-              );
+              await Get.to(() => const SettingsPage());
             },
           ),
         ],
@@ -74,25 +53,27 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.all(40.0),
         child: ElevatedButton.icon(
           onPressed: () async {
-            //Confirmation
-            final confirmed = await confirm(
-              context,
-              title: const Text("Focus Mode"),
-              content: const Text(TextConstants.focusModeDesc),
-              textOK: const Text("Start"),
-            );
-
-            //Check Confirmation
-            if (confirmed) {
-              //Go into Focus Mode
-              if (mounted) {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const FocusMode(),
+            // Confirmation
+            bool confirmed = await Get.dialog<bool>(
+                  AlertDialog(
+                    title: const Text("Focus Mode"),
+                    content: const Text(TextConstants.focusModeDesc),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Get.back(result: true),
+                        child: const Text("Start"),
+                      ),
+                      TextButton(
+                        onPressed: () => Get.back(result: false),
+                        child: const Text("Cancel"),
+                      ),
+                    ],
                   ),
-                );
-              }
+                ) ??
+                false;
+
+            if (confirmed) {
+              Get.to(() => const FocusMode());
             }
           },
           style: ElevatedButton.styleFrom(

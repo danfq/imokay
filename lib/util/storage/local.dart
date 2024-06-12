@@ -1,5 +1,4 @@
 import 'package:hive_flutter/adapters.dart';
-import 'package:imokay/util/models/sound_data.dart';
 import 'package:path_provider/path_provider.dart';
 
 ///Local Storage
@@ -33,18 +32,9 @@ class LocalStorage {
 
   ///Open Hive Boxes
   static Future<void> openBoxes() async {
-    //Register Adapters
-    registerAdapters();
-
     for (final box in _boxes) {
       await Hive.openBox(box);
     }
-  }
-
-  ///Register Adapters
-  static void registerAdapters() {
-    //SoundData Adapter
-    Hive.registerAdapter(SoundDataAdapter());
   }
 
   ///Update Value

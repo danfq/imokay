@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:imokay/util/models/sound_data.dart';
 import 'package:imokay/util/sound/all.dart';
 import 'package:imokay/util/storage/local.dart';
 import 'package:imokay/util/widgets/animations.dart';
 import 'package:imokay/util/widgets/sound_item.dart';
+import 'package:imokay/util/widgets/sounds.dart';
 
 class Favorites extends StatefulWidget {
   const Favorites({super.key});

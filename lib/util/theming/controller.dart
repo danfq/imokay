@@ -16,7 +16,7 @@ class ThemeController {
   }
 
   ///Change Theme
-  static void setTheme({
+  void setTheme({
     required BuildContext context,
     required bool mode,
   }) {
@@ -30,11 +30,11 @@ class ThemeController {
     }
 
     //Immersion
-    ThemeController.immersion(context: context);
+    immersion(context: context);
   }
 
   ///Immersion
-  static void immersion({
+  void immersion({
     required BuildContext context,
   }) {
     //Set System Navigation

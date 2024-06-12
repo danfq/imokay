@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:imokay/util/models/sound_data.dart';
 import 'package:imokay/util/sound/custom.dart';
 import 'package:imokay/util/sound/favorite.dart';
 import 'package:imokay/util/sound/manager.dart';
 import 'package:imokay/util/storage/local.dart';
+import 'package:imokay/util/widgets/sounds.dart';
 
 ///Sound Widget
 class SoundItem extends StatefulWidget {
