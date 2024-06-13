@@ -37,7 +37,6 @@ dependencies:
   hive_generator: ^2.0.0
   build_runner: ^2.4.4
   flutter_awesome_select: ^6.5.0
-  flutter_launcher_icons: ^0.13.1
   metaballs: ^1.5.0
   slider_controller: ^0.0.5
   google_fonts: ^4.0.4
@@ -45,6 +44,7 @@ dependencies:
   audioplayers: ^5.2.1
   url_launcher: ^6.2.3
   get: ^4.6.6
+  icons_launcher: ^2.1.7
 
 dev_dependencies:
   flutter_test:
