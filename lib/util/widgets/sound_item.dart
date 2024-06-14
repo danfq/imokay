@@ -6,6 +6,7 @@ import 'package:imokay/util/sound/custom.dart';
 import 'package:imokay/util/sound/favorite.dart';
 import 'package:imokay/util/sound/manager.dart';
 import 'package:imokay/util/storage/local.dart';
+import 'package:imokay/util/theming/color_handler.dart';
 import 'package:imokay/util/widgets/sounds.dart';
 
 ///Sound Widget
@@ -331,7 +332,11 @@ class _SoundItemState extends State<SoundItem>
               icon: Icon(
                 Ionicons.ios_heart,
                 color: (favorite ?? false)
-                    ? Theme.of(context).colorScheme.secondary
+                    ? ColorHandler.colorFromString(
+                          LocalStorage.boxData(box: "preferences")["colors"]
+                              ?["accent"],
+                        ) ??
+                        Theme.of(context).colorScheme.secondary
                     : Colors.grey,
               ),
             ),
