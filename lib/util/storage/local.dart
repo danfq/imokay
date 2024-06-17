@@ -9,9 +9,8 @@ class LocalStorage {
     "sounds",
     "playing",
     "preferences",
-    "incentives",
+    "timer",
     "custom_sound",
-    "groups",
     "app_bar",
   ];
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:imokay/util/sound/all.dart';
 import 'package:imokay/util/theming/controller.dart';
+import 'package:imokay/util/timer/handler.dart';
 import 'package:imokay/util/widgets/sound_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -20,7 +21,7 @@ class MainUISoundsController extends GetxController {
 class MainUISounds extends StatelessWidget {
   MainUISounds({super.key, required this.soundKeys});
 
-  // Sound Keys
+  //Sound Keys
   final List<GlobalKey> soundKeys;
 
   final MainUISoundsController controller = Get.put(MainUISoundsController());
@@ -78,7 +79,6 @@ class MainUISounds extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20.0),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Obx(() => AnimatedSmoothIndicator(
@@ -98,8 +98,11 @@ class MainUISounds extends StatelessWidget {
     );
   }
 
-  Widget _buildSoundGrid(BuildContext context,
-      {required List<SoundData> soundData}) {
+  ///Sound Grid
+  Widget _buildSoundGrid(
+    BuildContext context, {
+    required List<SoundData> soundData,
+  }) {
     return GridView.builder(
       physics: const BouncingScrollPhysics(),
       shrinkWrap: true,
@@ -111,18 +114,21 @@ class MainUISounds extends StatelessWidget {
       itemCount: soundData.length,
       itemBuilder: (context, index) {
         final data = soundData[index];
-        return Obx(() => SoundItem(
-              playing: controller.audioPlaying.value,
-              icon: soundIcons[data.name]!,
-              data: data,
-              extraInfo: data.extraInfo,
-              enabled: data.enabled,
-            ));
+        return Obx(
+          () => SoundItem(
+            playing: controller.audioPlaying.value,
+            icon: soundIcons[data.name]!,
+            data: data,
+            extraInfo: data.extraInfo,
+            enabled: data.enabled,
+          ),
+        );
       },
     );
   }
 }
 
+///Sound Data
 class SoundData {
   final String name;
   final String? extraInfo;

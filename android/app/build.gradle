@@ -46,11 +46,18 @@ android {
         applicationId "io.github.danfq.imokay"
         minSdkVersion 28
         targetSdkVersion flutter.targetSdkVersion
+        compileSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
         //Enable MultiDex
         multiDexEnabled true
+
+        compileOptions {
+            coreLibraryDesugaringEnabled true
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
     }
 
     buildTypes {
@@ -72,7 +79,13 @@ dependencies {
 
     //MultiDex
     def multidex_version = "2.0.1"
-
     implementation "androidx.multidex:multidex:$multidex_version"
+
+    //Desugaring
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.2.2"
+
+    //Window Manager
+    implementation "androidx.window:window:1.0.0"
+    implementation "androidx.window:window-java:1.0.0"
 
 }
