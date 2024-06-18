@@ -1,35 +1,136 @@
 import 'dart:async';
-import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:imokay/util/notifications/local.dart';
 import 'package:imokay/util/sound/manager.dart';
 import 'package:imokay/util/storage/local.dart';
 
-class TimerHandler extends GetxController {
-  /// Reactive Timer Duration
-  var timerDuration = Duration.zero.obs;
+///Timer Sheet
+class TimerSheet extends StatefulWidget {
+  const TimerSheet({super.key});
 
-  /// Reactive Timer Running State
-  var timerRunning = false.obs;
+  @override
+  State<StatefulWidget> createState() => _TimerSheetState();
+}
 
-  /// Timer Reference
-  Timer? _timer;
+class _TimerSheetState extends State<TimerSheet> {
+  late Timer _updateTimer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    //Update Timer
+    _updateTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _updateTimer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Title
+          const Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Text(
+              "Timer",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+              ),
+            ),
+          ),
+
+          //Timer UI - Based on timerRunning
+          TimerHandler.timerRunning
+              ? Text(TimerHandler.formatDuration(TimerHandler.timerDuration))
+              : CupertinoTimerPicker(
+                  initialTimerDuration: TimerHandler.timerDuration,
+                  onTimerDurationChanged: (duration) {
+                    setState(() {
+                      TimerHandler.storedDuration = duration;
+                      TimerHandler.timerDuration = duration;
+                    });
+                  },
+                ),
+
+          //Start or Stop Timer
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ElevatedButton(
+              onPressed: () {
+                //Close Sheet
+                Get.back();
+
+                //Start or Stop Timer
+                TimerHandler.timerRunning
+                    ? TimerHandler.stopTimer()
+                    : TimerHandler.startTimer(TimerHandler.timerDuration);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).dialogBackgroundColor,
+              ),
+              child: Text(
+                TimerHandler.timerRunning ? "Stop Timer" : "Start Timer",
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+///Timer Handler
+class TimerHandler {
+  ///Timer Duration
+  static Duration timerDuration = Duration.zero;
+
+  ///Timer Running State
+  static bool timerRunning = false;
+
+  ///Timer Reference
+  static Timer? _timer;
 
   /// Load Timer Duration from Storage
-  Duration? get storedDuration => parseDuration(
+  static Duration? get storedDuration => parseDuration(
         LocalStorage.boxData(box: "timer")["duration"]?["string"],
       );
 
-  /// Set Timer Duration to Storage
-  set storedDuration(Duration? duration) {
+  ///Set Timer Duration to Storage
+  static set storedDuration(Duration? duration) {
     LocalStorage.updateValue(box: "timer", item: "duration", value: {
       "string": duration.toString(),
     });
   }
 
-  /// Parse Timer Duration from `String` to `Duration`
-  Duration? parseDuration(String? duration) {
+  ///Format Duration into `HH:mm:ss` String
+  static String formatDuration(Duration duration) {
+    //Duration Parts
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    String hours = duration.inHours.toString();
+
+    //Formatted Duration
+    return "$hours:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  ///Parse Timer Duration from `String` to `Duration`
+  static Duration? parseDuration(String? duration) {
     if (duration != null) {
       try {
         List<String> parts = duration.split(":");
@@ -60,21 +161,18 @@ class TimerHandler extends GetxController {
   }
 
   /// Start Timer
-  void startTimer(Duration duration) {
+  static void startTimer(Duration duration) {
     storedDuration = duration;
-    timerDuration.value = duration;
-    timerRunning.value = true;
-
-    //Debug
-    debugPrint("TIMER: ${timerRunning.value}.");
+    timerDuration = duration;
+    timerRunning = true;
 
     //Cancel Previous Timer (if any)
     _timer?.cancel();
 
     //Set Timer
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (timerDuration.value > Duration.zero) {
-        timerDuration.value -= const Duration(seconds: 1);
+      if (timerDuration > Duration.zero) {
+        timerDuration -= const Duration(seconds: 1);
       } else {
         //Stop Timer
         stopTimer();
@@ -83,33 +181,39 @@ class TimerHandler extends GetxController {
         await _onTimerComplete();
       }
     });
+
+    //Notify User
+    LocalNotifications.toast(message: "Timer Started");
   }
 
-  ///Stop Timer
-  void stopTimer() {
+  /// Stop Timer
+  static void stopTimer() {
     //Stop Timer
     _timer?.cancel();
 
     //Reset Data
-    timerDuration.value = Duration.zero;
-    timerRunning.value = false;
+    timerDuration = Duration.zero;
+    timerRunning = false;
     storedDuration = null;
 
-    //Debug
-    debugPrint("TIMER: ${timerRunning.value}.");
+    //Stop All Players
+    AudioPlayerManager.stopAllPlayers();
   }
 
-  /// On Timer Complete
-  Future<void> _onTimerComplete() async {
+  ///On Timer Complete
+  static Future<void> _onTimerComplete() async {
+    //Notify User
     await LocalNotifications.notif(
       title: "Time is up!",
       message: "Your Timer is over!",
     );
+
+    //Stop All Players
     AudioPlayerManager.stopAllPlayers();
   }
 
-  /// Show Timer Sheet
-  Future<void> showTimerSheet() async {
+  ///Show Timer Sheet
+  static Future<void> showTimerSheet() async {
     await showModalBottomSheet(
       context: Get.context!,
       showDragHandle: true,
@@ -118,49 +222,7 @@ class TimerHandler extends GetxController {
           top: Radius.circular(14.0),
         ),
       ),
-      builder: (context) => SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Title
-            const Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Text(
-                "Timer",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
-                ),
-              ),
-            ),
-
-            // Timer UI
-            CupertinoTimerPicker(
-              initialTimerDuration: timerDuration.value,
-              onTimerDurationChanged: (duration) {
-                storedDuration = duration;
-                timerDuration.value = duration;
-              },
-            ),
-
-            // Set Timer Duration
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Get.back();
-                  startTimer(timerDuration.value);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).dialogBackgroundColor,
-                ),
-                child: const Text("Start Timer"),
-              ),
-            ),
-          ],
-        ),
-      ),
+      builder: (context) => const TimerSheet(),
     );
   }
 }

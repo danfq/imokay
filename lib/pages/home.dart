@@ -6,8 +6,6 @@ import 'package:imokay/pages/focus/focus.dart';
 import 'package:imokay/pages/settings/settings.dart';
 import 'package:imokay/pages/sounds/sounds.dart';
 import 'package:imokay/util/constants/text.dart';
-import 'package:imokay/util/storage/local.dart';
-import 'package:imokay/util/theming/color_handler.dart';
 import 'package:imokay/util/theming/controller.dart';
 import 'package:imokay/util/timer/handler.dart';
 
@@ -17,28 +15,10 @@ class Home extends StatelessWidget {
   //Inject Theme Controller
   final ThemeController themeController = Get.put(ThemeController());
 
-  //Inject Timer Handler
-  final TimerHandler timerHandler = Get.put(TimerHandler());
-
   @override
   Widget build(BuildContext context) {
     //Immersion
     themeController.immersion(context: context);
-
-    ///Two Digits Format
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-
-    ///Format Duration
-    String formatDuration(Duration duration) {
-      //Digits
-      final String twoDigitMinutes =
-          twoDigits(duration.inMinutes.remainder(60));
-      final String twoDigitSeconds =
-          twoDigits(duration.inSeconds.remainder(60));
-
-      //Formatted Time
-      return "${duration.inHours}:$twoDigitMinutes:$twoDigitSeconds";
-    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -58,7 +38,7 @@ class Home extends StatelessWidget {
             icon: const Icon(Ionicons.ios_timer_outline),
             tooltip: "Timer",
             onPressed: () async {
-              await TimerHandler().showTimerSheet();
+              await TimerHandler.showTimerSheet();
             },
           ),
 
@@ -80,26 +60,11 @@ class Home extends StatelessWidget {
       body: const SafeArea(
         child: SoundsPage(),
       ),
-      floatingActionButton: Obx(() {
-        return timerHandler.timerRunning.value
-            ? FloatingActionButton(
-                onPressed: () {},
-                shape: const CircleBorder(),
-                backgroundColor: ColorHandler.colorFromString(
-                      LocalStorage.boxData(box: "preferences")["colors"]
-                          ?["accent"],
-                    ) ??
-                    Theme.of(context).colorScheme.secondary,
-                child:
-                    const Icon(Ionicons.ios_timer_outline, color: Colors.white),
-              )
-            : Container();
-      }),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(40.0),
         child: ElevatedButton.icon(
           onPressed: () async {
-            // Confirmation
+            //Confirmation
             bool confirmed = await Get.dialog<bool>(
                   AlertDialog(
                     title: const Text("Focus Mode"),

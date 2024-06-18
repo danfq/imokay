@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:iconify_flutter/icons/ion.dart';
 
 ///Local Notifications
 class LocalNotifications {
