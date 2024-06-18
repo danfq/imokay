@@ -162,28 +162,31 @@ class TimerHandler {
 
   /// Start Timer
   static void startTimer(Duration duration) {
-    storedDuration = duration;
-    timerDuration = duration;
-    timerRunning = true;
+    //Check Duration
+    if (duration > Duration.zero) {
+      storedDuration = duration;
+      timerDuration = duration;
+      timerRunning = true;
 
-    //Cancel Previous Timer (if any)
-    _timer?.cancel();
+      //Cancel Previous Timer (if any)
+      _timer?.cancel();
 
-    //Set Timer
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (timerDuration > Duration.zero) {
-        timerDuration -= const Duration(seconds: 1);
-      } else {
-        //Stop Timer
-        stopTimer();
+      //Set Timer
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+        if (timerDuration > Duration.zero) {
+          timerDuration -= const Duration(seconds: 1);
+        } else {
+          //Stop Timer
+          stopTimer();
 
-        //On Timer Complete
-        await _onTimerComplete();
-      }
-    });
+          //On Timer Complete
+          await _onTimerComplete();
+        }
+      });
 
-    //Notify User
-    LocalNotifications.toast(message: "Timer Started");
+      //Notify User
+      LocalNotifications.toast(message: "Timer Started");
+    }
   }
 
   /// Stop Timer
