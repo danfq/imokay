@@ -56,7 +56,16 @@ class _TimerSheetState extends State<TimerSheet> {
 
           //Timer UI - Based on timerRunning
           TimerHandler.timerRunning
-              ? Text(TimerHandler.formatDuration(TimerHandler.timerDuration))
+              ? Card(
+                  color: Theme.of(context).canvasColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      TimerHandler.formatDuration(TimerHandler.timerDuration),
+                      style: const TextStyle(fontSize: 18.0),
+                    ),
+                  ),
+                )
               : CupertinoTimerPicker(
                   initialTimerDuration: TimerHandler.timerDuration,
                   onTimerDurationChanged: (duration) {
@@ -70,7 +79,7 @@ class _TimerSheetState extends State<TimerSheet> {
           //Start or Stop Timer
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: ElevatedButton(
+            child: TextButton(
               onPressed: () {
                 //Close Sheet
                 Get.back();
@@ -80,9 +89,6 @@ class _TimerSheetState extends State<TimerSheet> {
                     ? TimerHandler.stopTimer()
                     : TimerHandler.startTimer(TimerHandler.timerDuration);
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).dialogBackgroundColor,
-              ),
               child: Text(
                 TimerHandler.timerRunning ? "Stop Timer" : "Start Timer",
               ),
@@ -119,14 +125,16 @@ class TimerHandler {
 
   ///Format Duration into `HH:mm:ss` String
   static String formatDuration(Duration duration) {
-    //Duration Parts
+    //Two Digits Formatter
     String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+    //Parts
+    String twoDigitHours = twoDigits(duration.inHours.remainder(60));
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    String hours = duration.inHours.toString();
 
     //Formatted Duration
-    return "$hours:$twoDigitMinutes:$twoDigitSeconds";
+    return "$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
   }
 
   ///Parse Timer Duration from `String` to `Duration`
@@ -217,15 +225,10 @@ class TimerHandler {
 
   ///Show Timer Sheet
   static Future<void> showTimerSheet() async {
-    await showModalBottomSheet(
+    await showAdaptiveDialog(
       context: Get.context!,
-      showDragHandle: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(14.0),
-        ),
-      ),
-      builder: (context) => const TimerSheet(),
+      barrierDismissible: true,
+      builder: (context) => const Dialog(child: TimerSheet()),
     );
   }
 }
