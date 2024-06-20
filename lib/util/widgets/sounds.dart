@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:imokay/util/sound/all.dart';
 import 'package:imokay/util/theming/controller.dart';
-import 'package:imokay/util/timer/handler.dart';
 import 'package:imokay/util/widgets/sound_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -21,7 +20,7 @@ class MainUISoundsController extends GetxController {
 class MainUISounds extends StatelessWidget {
   MainUISounds({super.key, required this.soundKeys});
 
-  //Sound Keys
+  // Sound Keys
   final List<GlobalKey> soundKeys;
 
   final MainUISoundsController controller = Get.put(MainUISoundsController());
@@ -31,7 +30,6 @@ class MainUISounds extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
-        mainAxisSize: MainAxisSize.max,
         children: [
           Expanded(
             child: PageStorage(
@@ -79,37 +77,28 @@ class MainUISounds extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Obx(() => AnimatedSmoothIndicator(
-                  activeIndex: controller.currentSet.value,
-                  count: 3,
-                  effect: ExpandingDotsEffect(
-                    activeDotColor: ThemeController.current(context: context)
-                        ? Theme.of(context).iconTheme.color!
-                        : Colors.black,
-                    dotWidth: 10.0,
-                    dotHeight: 10.0,
-                  ),
-                )),
-          ),
         ],
       ),
     );
   }
 
-  ///Sound Grid
+  /// Simplified Sound Grid
   Widget _buildSoundGrid(
     BuildContext context, {
     required List<SoundData> soundData,
   }) {
+    //Calculate Columns based on Screen Width
+    double screenWidth = MediaQuery.of(context).size.width;
+    int crossAxisCount = (screenWidth / 150).floor();
+
     return GridView.builder(
       physics: const BouncingScrollPhysics(),
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 4,
-        mainAxisSpacing: 4,
+      padding: const EdgeInsets.all(10.0),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCount,
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
+        childAspectRatio: 1.0,
       ),
       itemCount: soundData.length,
       itemBuilder: (context, index) {
@@ -128,7 +117,7 @@ class MainUISounds extends StatelessWidget {
   }
 }
 
-///Sound Data
+/// Sound Data
 class SoundData {
   final String name;
   final String? extraInfo;

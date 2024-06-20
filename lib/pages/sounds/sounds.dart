@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:imokay/util/timer/handler.dart';
 import 'package:imokay/util/widgets/breathe.dart';
 import 'package:imokay/util/widgets/sounds.dart';
 
@@ -19,15 +17,13 @@ class _SoundsPageState extends State<SoundsPage> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         //Breathing Line
         const BreathingLine(isPlaying: true),
 
         //Sounds
-        MainUISounds(
-          soundKeys: keys,
-        ),
+        MainUISounds(soundKeys: keys),
       ],
     );
   }

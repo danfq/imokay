@@ -61,7 +61,7 @@ class Home extends StatelessWidget {
         child: SoundsPage(),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(40.0),
+        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 40.0),
         child: ElevatedButton.icon(
           onPressed: () async {
             //Confirmation
