@@ -20,7 +20,7 @@ void main() async {
           debugShowCheckedModeBanner: false,
           theme: light,
           darkTheme: dark,
-          home: Home(),
+          home: const Home(),
         );
       },
     ),

@@ -12,7 +12,7 @@ import 'package:imokay/util/theming/controller.dart';
 import 'package:imokay/util/timer/handler.dart';
 
 class Home extends StatefulWidget {
-  Home({super.key});
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
