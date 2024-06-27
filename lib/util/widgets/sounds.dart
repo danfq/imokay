@@ -42,19 +42,19 @@ class MainUISounds extends StatelessWidget {
                   _buildSoundGrid(
                     context,
                     soundData: [
-                      SoundData(name: "thunder"),
-                      SoundData(name: "wind"),
-                      SoundData(name: "birds"),
-                      SoundData(name: "waves"),
+                      SoundData(name: "thunder", extraInfo: "Thunder"),
+                      SoundData(name: "wind", extraInfo: "Wind"),
+                      SoundData(name: "birds", extraInfo: "Birds"),
+                      SoundData(name: "waves", extraInfo: "Waves"),
                     ],
                   ),
                   _buildSoundGrid(
                     context,
                     soundData: [
-                      SoundData(name: "fireplace"),
-                      SoundData(name: "vacuum"),
-                      SoundData(name: "talking"),
-                      SoundData(name: "tv_static"),
+                      SoundData(name: "fireplace", extraInfo: "Fireplace"),
+                      SoundData(name: "vacuum", extraInfo: "Vacuum"),
+                      SoundData(name: "talking", extraInfo: "People Talking"),
+                      SoundData(name: "tv_static", extraInfo: "TV Static"),
                     ],
                   ),
                   _buildSoundGrid(

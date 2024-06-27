@@ -79,7 +79,7 @@ class _TimerSheetState extends State<TimerSheet> {
           //Start or Stop Timer
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: TextButton(
+            child: ElevatedButton(
               onPressed: () {
                 //Close Sheet
                 Get.back();

@@ -71,12 +71,12 @@ class Home extends StatelessWidget {
                     content: const Text(TextConstants.focusModeDesc),
                     actions: [
                       TextButton(
-                        onPressed: () => Get.back(result: true),
-                        child: const Text("Start"),
-                      ),
-                      TextButton(
                         onPressed: () => Get.back(result: false),
                         child: const Text("Cancel"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => Get.back(result: true),
+                        child: const Text("Start"),
                       ),
                     ],
                   ),
