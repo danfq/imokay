@@ -2,9 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:imokay/util/sound/all.dart';
-import 'package:imokay/util/theming/controller.dart';
 import 'package:imokay/util/widgets/sound_item.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 // Controller for handling state
 class MainUISoundsController extends GetxController {
@@ -18,11 +16,15 @@ class MainUISoundsController extends GetxController {
 }
 
 class MainUISounds extends StatelessWidget {
-  MainUISounds({super.key, required this.soundKeys});
+  MainUISounds({super.key, required this.soundKeys, required this.volume});
 
-  // Sound Keys
+  //Sound Keys
   final List<GlobalKey> soundKeys;
 
+  //Volume
+  final double volume;
+
+  //Page Controller
   final MainUISoundsController controller = Get.put(MainUISoundsController());
   final PageController _pageController = PageController(initialPage: 0);
 
@@ -41,6 +43,7 @@ class MainUISounds extends StatelessWidget {
                 children: [
                   _buildSoundGrid(
                     context,
+                    volume: volume,
                     soundData: [
                       SoundData(name: "thunder", extraInfo: "Thunder"),
                       SoundData(name: "wind", extraInfo: "Wind"),
@@ -50,6 +53,7 @@ class MainUISounds extends StatelessWidget {
                   ),
                   _buildSoundGrid(
                     context,
+                    volume: volume,
                     soundData: [
                       SoundData(name: "fireplace", extraInfo: "Fireplace"),
                       SoundData(name: "vacuum", extraInfo: "Vacuum"),
@@ -59,6 +63,7 @@ class MainUISounds extends StatelessWidget {
                   ),
                   _buildSoundGrid(
                     context,
+                    volume: volume,
                     soundData: [
                       SoundData(name: "brown_noise", extraInfo: "Brown Noise"),
                       SoundData(name: "white_noise", extraInfo: "White Noise"),
@@ -86,6 +91,7 @@ class MainUISounds extends StatelessWidget {
   Widget _buildSoundGrid(
     BuildContext context, {
     required List<SoundData> soundData,
+    required double volume,
   }) {
     //Calculate Columns based on Screen Width
     double screenWidth = MediaQuery.of(context).size.width;
@@ -110,6 +116,7 @@ class MainUISounds extends StatelessWidget {
             data: data,
             extraInfo: data.extraInfo,
             enabled: data.enabled,
+            volume: volume,
           ),
         );
       },

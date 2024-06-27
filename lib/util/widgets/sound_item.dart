@@ -20,6 +20,7 @@ class SoundItem extends StatefulWidget {
     this.extraInfo,
     this.padding = 0.0,
     this.showFavorite = true,
+    required this.volume,
   });
 
   //Parameters
@@ -30,6 +31,7 @@ class SoundItem extends StatefulWidget {
   final String? extraInfo;
   final double padding;
   final bool showFavorite;
+  final double volume;
 
   @override
   State<SoundItem> createState() => _SoundItemState();
@@ -42,7 +44,8 @@ class _SoundItemState extends State<SoundItem>
   bool looping = false;
 
   //Volume
-  double volume = 80.0;
+  double volume =
+      LocalStorage.boxData(box: "preferences")["def_volume"] ?? 80.0;
 
   //New Group Controller
   TextEditingController newGroupController = TextEditingController();
@@ -162,24 +165,25 @@ class _SoundItemState extends State<SoundItem>
                                   padding: const EdgeInsets.all(40.0),
                                   child: StatefulBuilder(
                                     builder: (context, update) {
-                                      return Slider(
-                                        min: 10.0,
-                                        max: 100.0,
-                                        value: volume,
-                                        onChanged: (newVolume) async {
-                                          update(() => {});
+                                      return Column(
+                                        children: [
+                                          //Volume Slider
+                                          Slider(
+                                            min: 10.0,
+                                            max: 100.0,
+                                            value: volume,
+                                            onChanged: (newVolume) async {
+                                              update(() => {});
 
-                                          setState(() {
-                                            volume = newVolume;
-                                          });
+                                              setState(() {
+                                                volume = newVolume;
+                                              });
+                                            },
+                                          ),
 
-                                          //Set Player Volume
-                                          await AudioPlayerManager
-                                              .setPlayerVolume(
-                                            playerID: widget.data.name,
-                                            volume: volume,
-                                          );
-                                        },
+                                          //Volume Percentage
+                                          Text("${volume.floor()}%"),
+                                        ],
                                       );
                                     },
                                   ),

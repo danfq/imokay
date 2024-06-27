@@ -3,7 +3,10 @@ import 'package:imokay/util/widgets/breathe.dart';
 import 'package:imokay/util/widgets/sounds.dart';
 
 class SoundsPage extends StatefulWidget {
-  const SoundsPage({super.key});
+  const SoundsPage({super.key, required this.volume});
+
+  ///Volume
+  final double volume;
 
   @override
   State<SoundsPage> createState() => _SoundsPageState();
@@ -23,7 +26,7 @@ class _SoundsPageState extends State<SoundsPage> {
         const BreathingLine(isPlaying: true),
 
         //Sounds
-        MainUISounds(soundKeys: keys),
+        MainUISounds(soundKeys: keys, volume: widget.volume),
       ],
     );
   }

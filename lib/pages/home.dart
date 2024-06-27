@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -6,14 +7,24 @@ import 'package:imokay/pages/focus/focus.dart';
 import 'package:imokay/pages/settings/settings.dart';
 import 'package:imokay/pages/sounds/sounds.dart';
 import 'package:imokay/util/constants/text.dart';
+import 'package:imokay/util/storage/local.dart';
 import 'package:imokay/util/theming/controller.dart';
 import 'package:imokay/util/timer/handler.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   //Inject Theme Controller
   final ThemeController themeController = Get.put(ThemeController());
+
+  ///Volume
+  double defaultVolume =
+      LocalStorage.boxData(box: "preferences")["def_volume"] ?? 80.0;
 
   @override
   Widget build(BuildContext context) {
@@ -50,16 +61,24 @@ class Home extends StatelessWidget {
             ),
             tooltip: "Settings",
             onPressed: () async {
-              await Get.to(() => const SettingsPage());
+              await Navigator.push(
+                context,
+                CupertinoPageRoute(builder: (context) => const SettingsPage()),
+              ).then((defVolume) {
+                //Update Volume - if Not Null
+                if (defVolume != null) {
+                  setState(() {
+                    defaultVolume = defVolume;
+                  });
+                }
+              });
             },
           ),
         ],
         elevation: 0.0,
         backgroundColor: Colors.transparent,
       ),
-      body: const SafeArea(
-        child: SoundsPage(),
-      ),
+      body: SafeArea(child: SoundsPage(volume: defaultVolume)),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 40.0),
         child: ElevatedButton.icon(

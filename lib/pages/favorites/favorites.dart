@@ -18,6 +18,10 @@ class _FavoritesState extends State<Favorites> {
   late List? activeFavorites;
   final favorites = LocalStorage.boxData(box: "favorites");
 
+  //Volume
+  double volume =
+      LocalStorage.boxData(box: "preferences")["def_volume"] ?? 80.0;
+
   //Current View
   String currentView = "list";
 
@@ -50,6 +54,7 @@ class _FavoritesState extends State<Favorites> {
               name: favorite,
             ),
             showFavorite: false,
+            volume: volume,
           );
 
           //Add Favorites to List of Widgets
@@ -78,6 +83,7 @@ class _FavoritesState extends State<Favorites> {
               name: favorite,
             ),
             showFavorite: false,
+            volume: volume,
           );
 
           //Add Favorites to List of Widgets
