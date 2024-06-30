@@ -2,7 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:imokay/util/sound/all.dart';
+import 'package:imokay/util/storage/local.dart';
+import 'package:imokay/util/theming/color_handler.dart';
 import 'package:imokay/util/widgets/sound_item.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 // Controller for handling state
 class MainUISoundsController extends GetxController {
@@ -25,7 +28,9 @@ class MainUISounds extends StatelessWidget {
   final double volume;
 
   //Page Controller
-  final MainUISoundsController controller = Get.put(MainUISoundsController());
+  final MainUISoundsController _soundsController = Get.put(
+    MainUISoundsController(),
+  );
   final PageController _pageController = PageController(initialPage: 0);
 
   @override
@@ -33,6 +38,26 @@ class MainUISounds extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
+          //Page Indicator
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SmoothPageIndicator(
+              controller: _pageController,
+              effect: SwapEffect(
+                activeDotColor: ColorHandler.colorFromString(
+                      LocalStorage.boxData(
+                        box: "preferences",
+                      )["colors"]?["accent"],
+                    ) ??
+                    Theme.of(context).colorScheme.secondary,
+                dotHeight: 12.0,
+                dotWidth: 12.0,
+              ),
+              count: 3,
+            ),
+          ),
+
+          //Sounds
           Expanded(
             child: PageStorage(
               bucket: PageStorageBucket(),
@@ -77,7 +102,7 @@ class MainUISounds extends StatelessWidget {
                   ),
                 ],
                 onPageChanged: (page) {
-                  controller.setPage(page);
+                  _soundsController.setPage(page);
                 },
               ),
             ),
@@ -111,7 +136,7 @@ class MainUISounds extends StatelessWidget {
         final data = soundData[index];
         return Obx(
           () => SoundItem(
-            playing: controller.audioPlaying.value,
+            playing: _soundsController.audioPlaying.value,
             icon: soundIcons[data.name]!,
             data: data,
             extraInfo: data.extraInfo,

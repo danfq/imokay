@@ -26,11 +26,6 @@ class _SettingsPageState extends State<SettingsPage> {
         ) ??
         Theme.of(context).colorScheme.secondary;
 
-    Color favoritesColor = ColorHandler.colorFromString(
-          LocalStorage.boxData(box: "preferences")["colors"]?["favorites"],
-        ) ??
-        Theme.of(context).colorScheme.secondary;
-
     Color activeSoundColor = ColorHandler.colorFromString(
           LocalStorage.boxData(box: "preferences")["colors"]?["active_sound"],
         ) ??
@@ -148,50 +143,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                           item: "colors",
                                           value: {
                                             "accent": accentColor.toString(),
-                                            "favorites":
-                                                favoritesColor.toString(),
-                                            "active_sound":
-                                                activeSoundColor.toString(),
-                                          },
-                                        );
-                                      });
-                                    },
-                                  );
-                                },
-                              ),
-                              StatefulBuilder(
-                                builder: (context, update) {
-                                  return ListTile(
-                                    title: const Text("Favorites"),
-                                    trailing: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: favoritesColor,
-                                      ),
-                                    ),
-                                    onTap: () async {
-                                      //Show Dialog
-                                      await showColorPickerDialog(
-                                        context,
-                                        favoritesColor,
-                                      ).then((newColor) async {
-                                        //Update UI
-                                        setState(() {
-                                          favoritesColor = newColor;
-                                        });
-
-                                        update(() => {});
-
-                                        //Update Colors Locally
-                                        await LocalStorage.updateValue(
-                                          box: "preferences",
-                                          item: "colors",
-                                          value: {
-                                            "accent": accentColor.toString(),
-                                            "favorites":
-                                                favoritesColor.toString(),
                                             "active_sound":
                                                 activeSoundColor.toString(),
                                           },
@@ -232,8 +183,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                           item: "colors",
                                           value: {
                                             "accent": accentColor.toString(),
-                                            "favorites":
-                                                favoritesColor.toString(),
                                             "active_sound":
                                                 activeSoundColor.toString(),
                                           },
