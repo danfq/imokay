@@ -1,88 +1,60 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 
+/// Audio Player Manager
 class AudioPlayerManager {
-  ///Players
+  /// Players
   static final Map<String, AudioPlayer> _players = {};
 
-  ///Initialize Audio Service
-  static void init() {
-    //Set Global Context
-    AudioPlayer.global.setAudioContext(
-      const AudioContext(
-        iOS: AudioContextIOS(
-          category: AVAudioSessionCategory.playback,
-          options: [
-            AVAudioSessionOptions.allowBluetoothA2DP,
-            AVAudioSessionOptions.allowBluetooth,
-            AVAudioSessionOptions.mixWithOthers,
-          ],
-        ),
-        android: AudioContextAndroid(audioFocus: AndroidAudioFocus.gain),
-      ),
-    );
-  }
-
-  ///Get Audio Player by `playerID`
+  /// Get Audio Player by `playerID`
   static AudioPlayer getPlayer(String playerID) {
     return _players.putIfAbsent(
       playerID,
-      () => AudioPlayer(playerId: playerID),
+      () => AudioPlayer(),
     );
   }
 
-  ///Set Focus Mode
+  /// Set Focus Mode
   ///
-  ///If enabling, set all Sounds as Looping, else set them as Finish
+  /// If enabling, set all Sounds as Looping, else set them to Finish
   static Future<void> setFocusMode({required bool mode}) async {
     for (final player in _players.values) {
-      //Enable or Disable
-      switch (mode) {
-        //Enable
-        case true:
-          await player.setReleaseMode(ReleaseMode.loop);
-          break;
-
-        //Disable
-        case false:
-          await player.setReleaseMode(ReleaseMode.stop);
-          break;
-      }
+      await player.setLoopMode(mode ? LoopMode.one : LoopMode.off);
     }
   }
 
-  ///Set AudioPlayer Volume
+  /// Set AudioPlayer Volume
   static Future<void> setPlayerVolume({
     required String playerID,
     required double volume,
   }) async {
-    //Player
+    // Player
     final player = getPlayer(playerID);
 
-    //Set Volume
+    // Set Volume
     await player.setVolume(volume / 100);
   }
 
-  ///Set Volume for All Players
+  /// Set Volume for All Players
   static Future<void> setVolume({required double volume}) async {
-    //Set Volume for All Players
+    // Set Volume for All Players
     for (final player in _players.values) {
       await player.setVolume(volume / 100);
     }
   }
 
-  ///Stop All AudioPlayers
-  static void stopAllPlayers() async {
+  /// Stop All AudioPlayers
+  static Future<void> stopAllPlayers() async {
     for (final player in _players.values) {
       await player.stop();
     }
   }
 
-  ///Update Loop Status by `playerID`
-  static void updateLoopStatus(String playerID, bool loopStatus) {
+  /// Update Loop Status by `playerID`
+  static Future<void> updateLoopStatus(String playerID, bool loopStatus) async {
     final player = _players[playerID];
 
     if (player != null) {
-      player.setReleaseMode(loopStatus ? ReleaseMode.loop : ReleaseMode.stop);
+      await player.setLoopMode(loopStatus ? LoopMode.one : LoopMode.off);
     }
   }
 }

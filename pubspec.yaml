@@ -40,10 +40,11 @@ dependencies:
   slider_controller: ^0.0.5
   google_fonts: ^4.0.4
   iconify_flutter: ^0.0.5
-  audioplayers: ^5.2.1
   url_launcher: ^6.2.3
   get: ^4.6.6
   icons_launcher: ^2.1.7
+  logger: ^2.3.0
+  just_audio: ^0.9.38
 
 dev_dependencies:
   flutter_test:
