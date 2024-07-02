@@ -3,7 +3,7 @@ description: Everything will be just fine.
 
 publish_to: 'none'
 
-version: 3.8.0+1
+version: 4.0.0+1
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
