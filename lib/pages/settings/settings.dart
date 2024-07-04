@@ -21,12 +21,12 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     //Default Colors
-    Color accentColor = ColorHandler.colorFromString(
+    Color accentColor = ColorHandler.hexToColor(
           LocalStorage.boxData(box: "preferences")["colors"]?["accent"],
         ) ??
         Theme.of(context).colorScheme.secondary;
 
-    Color activeSoundColor = ColorHandler.colorFromString(
+    Color activeSoundColor = ColorHandler.hexToColor(
           LocalStorage.boxData(box: "preferences")["colors"]?["active_sound"],
         ) ??
         Theme.of(context).cardColor;
@@ -142,9 +142,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                           box: "preferences",
                                           item: "colors",
                                           value: {
-                                            "accent": accentColor.toString(),
+                                            "accent":
+                                                ColorHandler.colorToHexString(
+                                              accentColor,
+                                            ),
                                             "active_sound":
-                                                activeSoundColor.toString(),
+                                                ColorHandler.colorToHexString(
+                                              activeSoundColor,
+                                            ),
                                           },
                                         );
                                       });
@@ -182,9 +187,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                           box: "preferences",
                                           item: "colors",
                                           value: {
-                                            "accent": accentColor.toString(),
+                                            "accent":
+                                                ColorHandler.colorToHexString(
+                                              accentColor,
+                                            ),
                                             "active_sound":
-                                                activeSoundColor.toString(),
+                                                ColorHandler.colorToHexString(
+                                              activeSoundColor,
+                                            ),
                                           },
                                         );
                                       });

@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 
-///Color Handler
+/// Color Handler
 class ColorHandler {
-  ///Convert Color String to Color Object
-  static Color? colorFromString(String? colorString) {
-    if (colorString != null) {
-      //Remove Unwanted Portions
-      String hexString =
-          colorString.replaceAll("Color(", "").replaceAll(")", "");
+  ///Convert Color to HEX String
+  static String colorToHexString(Color color) {
+    return "#${color.value.toRadixString(16).padLeft(8, "0")}";
+  }
 
-      //Convert Hex to Int
-      int hexValue = int.parse(hexString);
-
-      //Return Resulting Color
-      return Color(hexValue);
-    }
-
-    return null;
+  ///Convert HEX String to Color
+  static Color? hexToColor(String? hexColor) {
+    return hexColor != null
+        ? Color(int.parse(hexColor.replaceFirst("#", "0xff")))
+        : null;
   }
 }

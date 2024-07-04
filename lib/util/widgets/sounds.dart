@@ -44,7 +44,7 @@ class MainUISounds extends StatelessWidget {
             child: SmoothPageIndicator(
               controller: _pageController,
               effect: SwapEffect(
-                activeDotColor: ColorHandler.colorFromString(
+                activeDotColor: ColorHandler.hexToColor(
                       LocalStorage.boxData(
                         box: "preferences",
                       )["colors"]?["accent"],

@@ -357,7 +357,7 @@ class _SoundItemState extends State<SoundItem>
               icon: Icon(
                 Ionicons.ios_heart,
                 color: (favorite ?? false)
-                    ? ColorHandler.colorFromString(
+                    ? ColorHandler.hexToColor(
                           LocalStorage.boxData(box: "preferences")["colors"]
                               ?["accent"],
                         ) ??
