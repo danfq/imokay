@@ -10,7 +10,13 @@ class AudioPlayerManager {
     // Set Global Context
     AudioPlayer.global.setAudioContext(
       AudioContext(
-        iOS: AudioContextIOS(category: AVAudioSessionCategory.playback),
+        iOS: AudioContextIOS(
+          category: AVAudioSessionCategory.playback,
+          options: const {
+            AVAudioSessionOptions.allowBluetoothA2DP,
+            AVAudioSessionOptions.mixWithOthers,
+          },
+        ),
         android: const AudioContextAndroid(audioFocus: AndroidAudioFocus.gain),
       ),
     );
