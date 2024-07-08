@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:imokay/util/sound/custom.dart';
@@ -6,7 +8,6 @@ import 'package:imokay/util/sound/manager.dart';
 import 'package:imokay/util/storage/local.dart';
 import 'package:imokay/util/theming/color_handler.dart';
 import 'package:imokay/util/widgets/sounds.dart';
-import 'package:just_audio/just_audio.dart';
 
 ///Sound Widget
 class SoundItem extends StatefulWidget {
@@ -58,7 +59,8 @@ class _SoundItemState extends State<SoundItem>
     favorite = LocalStorage.boxData(box: "favorites")[widget.data.name];
 
     //Playing State
-    playing = AudioPlayerManager.getPlayer(widget.data.name).playing;
+    playing = AudioPlayerManager.getPlayer(widget.data.name).state ==
+        PlayerState.playing;
   }
 
   ///Play Audio based on `name`
@@ -71,55 +73,39 @@ class _SoundItemState extends State<SoundItem>
       });
     }
 
-    //Audio Player
     final audioPlayer = AudioPlayerManager.getPlayer(widget.data.name);
-
-    //Audio Source
-    AudioSource audioSource;
-
-    //Check for Custom Sound
-    if (widget.data.name != "custom") {
-      audioSource = AudioSource.asset("assets/audio/${widget.data.name}.flac");
-    } else {
-      //Custom Sound Path
-      final filePath = LocalStorage.boxData(box: "custom_sound")["path"];
-
-      //Set Custom Sound Source
-      audioSource = AudioSource.file(filePath);
-    }
+    final audioSource = (widget.data.name != "custom")
+        ? AssetSource("audio/${widget.data.name}.flac")
+        : BytesSource(
+            File(
+              LocalStorage.boxData(box: "custom_sound")["path"],
+            ).readAsBytesSync(),
+          );
 
     //Set Volume
-    await audioPlayer.setVolume(volume / 100);
-
-    //Set Source
-    await audioPlayer.setAudioSource(audioSource);
-
-    //Play
-    await audioPlayer.play();
+    await audioPlayer.setVolume(volume / 100).then((_) async {
+      //Play Audio
+      await audioPlayer.play(audioSource);
+    });
 
     //Audio Stopped Listener
-    audioPlayer.playerStateStream.listen((state) {
-      if (mounted) {
-        setState(() {
-          playing = state.playing;
-          // Stopped state handling
-          if (state.processingState == ProcessingState.idle ||
-              state.processingState == ProcessingState.completed) {
+    audioPlayer.onPlayerStateChanged.listen((state) {
+      if (state == PlayerState.stopped) {
+        if (mounted) {
+          setState(() {
             playing = false;
             looping = false;
-          }
-        });
+          });
+        }
       }
     });
 
     //Audio Complete
-    audioPlayer.processingStateStream.listen((state) {
-      if (state == ProcessingState.completed) {
-        if (mounted && !looping) {
-          setState(() {
-            playing = false;
-          });
-        }
+    audioPlayer.onPlayerComplete.listen((_) {
+      if (mounted && !looping) {
+        setState(() {
+          playing = false;
+        });
       }
     });
   }
@@ -192,13 +178,6 @@ class _SoundItemState extends State<SoundItem>
                                               setState(() {
                                                 volume = newVolume;
                                               });
-
-                                              //Update Player Volume
-                                              await AudioPlayerManager
-                                                  .setPlayerVolume(
-                                                playerID: widget.data.name,
-                                                volume: volume,
-                                              );
                                             },
                                           ),
 

@@ -1,15 +1,26 @@
-import 'package:just_audio/just_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 /// Audio Player Manager
 class AudioPlayerManager {
   /// Players
   static final Map<String, AudioPlayer> _players = {};
 
+  /// Initialize Audio Service
+  static void init() {
+    // Set Global Context
+    AudioPlayer.global.setAudioContext(
+      AudioContext(
+        iOS: AudioContextIOS(category: AVAudioSessionCategory.playback),
+        android: const AudioContextAndroid(audioFocus: AndroidAudioFocus.gain),
+      ),
+    );
+  }
+
   /// Get Audio Player by `playerID`
   static AudioPlayer getPlayer(String playerID) {
     return _players.putIfAbsent(
       playerID,
-      () => AudioPlayer(),
+      () => AudioPlayer(playerId: playerID),
     );
   }
 
@@ -18,7 +29,9 @@ class AudioPlayerManager {
   /// If enabling, set all Sounds as Looping, else set them to Finish
   static Future<void> setFocusMode({required bool mode}) async {
     for (final player in _players.values) {
-      await player.setLoopMode(mode ? LoopMode.one : LoopMode.off);
+      await player.setReleaseMode(
+        mode ? ReleaseMode.loop : ReleaseMode.stop,
+      );
     }
   }
 
@@ -54,7 +67,8 @@ class AudioPlayerManager {
     final player = _players[playerID];
 
     if (player != null) {
-      await player.setLoopMode(loopStatus ? LoopMode.one : LoopMode.off);
+      await player
+          .setReleaseMode(loopStatus ? ReleaseMode.loop : ReleaseMode.stop);
     }
   }
 }
