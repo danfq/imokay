@@ -178,6 +178,13 @@ class _SoundItemState extends State<SoundItem>
                                               setState(() {
                                                 volume = newVolume;
                                               });
+
+                                              //Update Volume
+                                              await AudioPlayerManager
+                                                  .setPlayerVolume(
+                                                playerID: widget.data.name,
+                                                volume: volume,
+                                              );
                                             },
                                           ),
 
